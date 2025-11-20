@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - FundHub</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="admin-brand">
+                <div class="logo-icon" style="width:30px; height:30px; font-size:1rem">F</div>
+                <span>FundHub Admin</span>
+            </div>
+            <nav class="admin-menu">
+                <a href="#" class="active"><i class="bi bi-grid-1x2-fill"></i> <span>Tổng quan</span></a>
+                <a href="#"><i class="bi bi-people"></i> <span>Người dùng</span></a>
+                <a href="#"><i class="bi bi-wallet"></i> <span>Giao dịch</span></a>
+            </nav>
+            <div class="admin-menu" style="flex: 0;">
+                <a href="#" onclick="handleLogout()" style="color: #FCA5A5;"><i class="bi bi-box-arrow-right"></i> <span>Đăng xuất</span></a>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <h2 style="margin-bottom: 30px;">Tổng quan hệ thống</h2>
+            
+            <div id="admin-stats" class="stats-grid" style="margin-top: 0; box-shadow: none; padding: 0; background: transparent; border: none;">
+                </div>
+
+            <div class="table-container" style="margin-top: 40px;">
+                <h3 style="padding: 20px 24px; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between;">
+                    Dự án chờ duyệt
+                    <span class="badge badge-pending" style="font-size: 0.75rem;">Cần xử lý ngay</span>
+                </h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th width="40%">Thông tin dự án</th>
+                            <th>Mục tiêu</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body">
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="JS/data.js"></script>
+    <script src="JS/main.js"></script>
+</body>
+</html>

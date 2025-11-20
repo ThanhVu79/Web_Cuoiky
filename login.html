@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - FundHub</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-visual">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600" alt="Crowdfunding">
+            <div class="auth-visual-content">
+                <h2>Kiến tạo tương lai <br>cùng FundHub</h2>
+                <p>Nền tảng gọi vốn cộng đồng uy tín hàng đầu Việt Nam với hơn 500+ dự án thành công.</p>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Đăng nhập</h1>
+                    <p>Chào mừng trở lại! Vui lòng nhập thông tin.</p>
+                </div>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group" style="background: #F0FDF4; padding: 15px; border-radius: 8px; border: 1px dashed #00B862;">
+                        <label style="color: #166534;">⚡ TEST MODE: Chọn vai trò</label>
+                        <div class="role-selector">
+                            <button type="button" class="role-btn active" onclick="fillLogin('contributor@fundhub.com', this)">Contributor</button>
+                            <button type="button" class="role-btn" onclick="fillLogin('founder@fundhub.com', this)">Founder</button>
+                            <button type="button" class="role-btn" onclick="fillLogin('admin@fundhub.com', this)">Admin</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" style="padding: 14px;">Đăng nhập ngay</button>
+                </form>
+
+                <p class="text-center" style="margin-top: 20px; color: var(--text-light);">
+                    Chưa có tài khoản? <a href="#" class="text-primary" style="font-weight: 700;">Đăng ký miễn phí</a>
+                </p>
+                <p class="text-center" style="margin-top: 10px;">
+                    <a href="index.html" style="font-size: 0.9rem; color: var(--text-light);"><i class="bi bi-arrow-left"></i> Quay lại trang chủ</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="JS/data.js"></script>
+    <script src="JS/main.js"></script>
+    <script>
+        // Hàm hỗ trợ điền nhanh form để test
+        function fillLogin(email, btn) {
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = '123456';
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        // Mặc định chọn role contributor
+        fillLogin('contributor@fundhub.com', document.querySelector('.role-btn'));
+    </script>
+
+<div id="forgot-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeForgotModal()">&times;</span>
+        <h3 style="margin-bottom: 10px;">Quên mật khẩu?</h3>
+        <p style="color: var(--text-light); margin-bottom: 20px;">Nhập email của bạn, chúng tôi sẽ gửi hướng dẫn đặt lại.</p>
+        <form onsubmit="handleForgotSubmit(event)">
+            <div class="form-group">
+                <label>Email đăng ký</label>
+                <input type="email" id="forgot-email" class="form-control" required>
+            </div>
+            <button class="btn btn-primary btn-full">Gửi yêu cầu</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
