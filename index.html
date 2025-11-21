@@ -32,78 +32,180 @@
     </nav>
 
     <header class="hero">
-      <div class="container">
-        <h1 class="hero-title">
-          Hỗ trợ Startup <br />
-          <span class="text-primary">Độc Lập Của Bạn</span>
-        </h1>
-        <p class="hero-desc">
-          Kết nối với cộng đồng nhà đầu tư thiên thần lớn nhất Việt Nam để biến
-          ý tưởng thành hiện thực.
-        </p>
-        <div class="hero-btns">
-          <a href="#explore" class="btn btn-primary">Khám phá dự án</a>
-          <a
-            href="create-project.html"
-            id="hero-create-btn"
-            class="btn btn-outline"
-            >Bắt đầu dự án</a
-          >
+      <div class="container hero-grid">
+        <div>
+          <span class="pill">TreFund Platform</span>
+          <h1 class="hero-title">
+            Gọi vốn cộng đồng minh bạch cho startup Việt
+          </h1>
+          <p class="hero-desc">
+            TreFund giúp nhà sáng lập giới thiệu dự án, contributor theo dõi danh mục đầu tư và admin kiểm soát quy trình duyệt – tất cả trong một nền tảng vận hành giống các dịch vụ credit chuyên nghiệp.
+          </p>
+          <div class="hero-actions">
+            <a href="#explore" class="btn btn-primary">Khám phá dự án</a>
+            <a
+              href="create-project.html"
+              id="hero-create-btn"
+              class="btn btn-outline"
+              >Khởi tạo dự án</a
+            >
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <strong>+156</strong>
+              Dự án đã gọi vốn
+            </div>
+            <div class="hero-stat">
+              <strong>+2.3K</strong>
+              Contributor hoạt động
+            </div>
+            <div class="hero-stat">
+              <strong>5.2B</strong>
+              VNĐ đã unlock
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-glow"></div>
+          <img
+            src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80"
+            alt="Dashboard preview"
+          />
         </div>
       </div>
     </header>
 
-    <section id="about" class="section bg-white">
+    <section id="about" class="section">
       <div class="container">
-        <div class="text-center" style="margin-bottom: 60px">
-          <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 10px">
-            Về FundHub
+        <div class="about-layout">
+          <div>
+            <span class="pill">Giới thiệu</span>
+            <h2 style="font-size: 2.6rem; margin: 20px 0">
+              TreFund kết nối ý tưởng táo bạo với nguồn vốn cộng đồng
+            </h2>
+            <p class="text-muted" style="font-size: 1.05rem">
+              Mục tiêu của chúng tôi: mang trải nghiệm kiểu GoFundMe tới startup
+              Việt – nơi người ủng hộ donate vì niềm tin, không kỳ vọng cổ phần.
+              Hệ thống phân vai rõ ràng giúp từng nhóm người dùng hiểu chính xác
+              mình có thể làm gì.
+            </p>
+            <div class="stats-grid" style="margin-top: 40px">
+              <div class="stat-box">
+                <span class="stat-number">4</span>
+                <span class="stat-label">Nhóm người dùng chính</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number">24+</span>
+                <span class="stat-label">Use case được thiết kế</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number">Real-time</span>
+                <span class="stat-label">Theo dõi tiến độ & milestone</span>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card" style="padding: 40px">
+            <h3 style="margin-bottom: 16px">Highlight logic</h3>
+            <ul style="color: var(--text-muted); line-height: 1.8">
+              <li>Guest xem danh sách, chi tiết và lọc dự án không cần đăng nhập</li>
+              <li>Contributor quản lý hồ sơ, portfolio, lịch sử donate</li>
+              <li>Founder tạo/ chỉnh sửa dự án, giới hạn 2 dự án</li>
+              <li>Admin duyệt dự án, quản lý tranh chấp, hoàn tiền & thống kê</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 40px">
+          <span class="pill">Cách thức hoạt động</span>
+          <h2 style="font-size: 2.4rem; margin-top: 18px">
+            Lộ trình rõ ràng cho nhà đầu tư và nhà gọi vốn
           </h2>
-          <p style="color: var(--text-light)">
-            Nền tảng gây quỹ cộng đồng hàng đầu dành cho các startup đổi mới tại
-            Việt Nam.
+          <p class="text-muted">
+            Chọn hành trình phù hợp để bắt đầu đồng hành cùng TreFund
           </p>
         </div>
-
-        <div class="about-layout">
-          <div class="about-content">
-            <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: 20px">
-              Sứ mệnh của chúng tôi
-            </h3>
-            <p
-              style="
-                color: var(--text-light);
-                margin-bottom: 20px;
-                font-size: 1.05rem;
-              "
-            >
-              TreFund được thành lập với mục đích kết nối các nhà sáng lập tài
-              ba với những nhà đầu tư đam mê sáng tạo. Chúng tôi tin rằng mỗi ý
-              tưởng tuyệt vời xứng đáng được hỗ trợ.
-            </p>
-            <p style="color: var(--text-light); font-size: 1.05rem">
-              Từ nông nghiệp công nghệ đến điện ảnh sáng tạo, chúng tôi hỗ trợ
-              các dự án có tiềm năng thay đổi cuộc sống hàng triệu người.
-            </p>
+        <div class="how-tabs">
+          <button class="how-tab active" data-target="how-investor">
+            Dành cho Nhà đầu tư
+          </button>
+          <button class="how-tab" data-target="how-founder">
+            Dành cho Nhà gọi vốn
+          </button>
+        </div>
+        <div id="how-investor" class="how-panel active">
+          <div class="how-step-grid">
+            <div class="how-step">
+              <div class="how-step-icon"><i class="bi bi-search"></i></div>
+              <div class="how-step-title">Khám phá</div>
+              <p>
+                Lọc theo lĩnh vực, mục tiêu và tiến độ để tìm ra những dự án
+                phù hợp với niềm tin và danh mục cá nhân.
+              </p>
+            </div>
+            <div class="how-step">
+              <div class="how-step-icon"><i class="bi bi-wallet2"></i></div>
+              <div class="how-step-title">Ủng hộ an toàn</div>
+              <p>
+                Đóng góp qua các cổng thanh toán Web2 như VNPAY, MoMo và nhận
+                biên nhận minh bạch tức thì.
+              </p>
+            </div>
+            <div class="how-step">
+              <div class="how-step-icon"><i class="bi bi-gift"></i></div>
+              <div class="how-step-title">Theo dõi & Nhận quà</div>
+              <p>
+                Theo dõi milestone, nhận thông báo tiến độ và quyền lợi khi dự án
+                hoàn thành mục tiêu.
+              </p>
+            </div>
           </div>
-
-          <div class="stats-grid">
-            <div class="stat-box">
-              <span class="stat-number">156</span>
-              <span class="stat-label">Dự án thành công</span>
+          <div class="how-cta">
+            <div>
+              <strong>Trở thành nhà đầu tư thiên thần trong vài phút.</strong>
+              <p class="text-muted">Đăng nhập để xem dashboard và quản lý portfolio.</p>
             </div>
-            <div class="stat-box">
-              <span class="stat-number">2.3K</span>
-              <span class="stat-label">Nhà đầu tư</span>
+            <a href="login.html" class="btn btn-primary">Bắt đầu đầu tư</a>
+          </div>
+        </div>
+        <div id="how-founder" class="how-panel">
+          <div class="how-step-grid">
+            <div class="how-step">
+              <div class="how-step-icon"><i class="bi bi-lightbulb"></i></div>
+              <div class="how-step-title">Khởi tạo</div>
+              <p>
+                Kể câu chuyện của bạn, đặt mục tiêu kêu gọi vốn và chuẩn bị media
+                giới thiệu sản phẩm.
+              </p>
             </div>
-            <div class="stat-box">
-              <span class="stat-number">5.2B</span>
-              <span class="stat-label">Vốn gây được</span>
+            <div class="how-step">
+              <div class="how-step-icon"><i class="bi bi-megaphone"></i></div>
+              <div class="how-step-title">Lan tỏa</div>
+              <p>
+                Chia sẻ dự án tới cộng đồng TreFund và mạng xã hội để thu hút
+                contributor.
+              </p>
             </div>
-            <div class="stat-box">
-              <span class="stat-number">78%</span>
-              <span class="stat-label">Tỷ lệ thành công</span>
+            <div class="how-step">
+              <div class="how-step-icon"><i class="bi bi-rocket-takeoff"></i></div>
+              <div class="how-step-title">Hiện thực hóa</div>
+              <p>
+                Nhận nguồn vốn minh bạch theo từng giai đoạn, cập nhật milestone
+                và yêu cầu rút vốn khi đạt tiến độ.
+              </p>
             </div>
+          </div>
+          <div class="how-cta">
+            <div>
+              <strong>Biến ý tưởng thành dự án được cộng đồng hậu thuẫn.</strong>
+              <p class="text-muted">
+                Founder được quản lý tối đa 2 dự án với dashboard chuyên dụng.
+              </p>
+            </div>
+            <a href="create-project.html" class="btn btn-primary">Khởi tạo dự án</a>
           </div>
         </div>
       </div>
@@ -112,9 +214,12 @@
     <section id="explore" class="section">
       <div class="container">
         <div class="text-center" style="margin-bottom: 40px">
-          <h2 style="font-size: 2.5rem; font-weight: 800">Dự án nổi bật</h2>
-          <p style="color: var(--text-light)">
-            Những dự án đang nổi bật trên TreFund
+          <span class="pill">Danh sách dự án</span>
+          <h2 style="font-size: 2.5rem; font-weight: 800; margin-top: 16px">
+            Hệ sinh thái dự án đang gây quỹ
+          </h2>
+          <p class="text-muted">
+            Guest có thể xem & lọc, Contributor đăng nhập để donate
           </p>
         </div>
         <div class="filter-container">
@@ -128,19 +233,15 @@
       </div>
     </section>
 
-    <section id="leaderboard" class="section bg-white">
+    <section id="leaderboard" class="section">
       <div class="container">
         <div class="text-center" style="margin-bottom: 40px">
-          <div
-            style="color: var(--primary); font-size: 3rem; margin-bottom: 10px"
-          >
-            <i class="bi bi-trophy"></i>
-          </div>
-          <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 10px">
-            Bảng xếp hạng
+          <span class="pill">Leaderboard</span>
+          <h2 style="font-size: 2.5rem; font-weight: 800; margin-top: 16px">
+            Top dự án & contributor năng động
           </h2>
-          <p style="color: var(--text-light)">
-            Khám phá các dự án hàng đầu và những người ủng hộ tích cực nhất
+          <p class="text-muted">
+            Số liệu hiển thị cho cả Guest, Contributor, Founder và Admin
           </p>
         </div>
 

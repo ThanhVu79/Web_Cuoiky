@@ -20,7 +20,7 @@
 
     <div class="main-layout">
         <aside class="sidebar-card">
-            <img src="https://ui-avatars.com/api/?name=User&background=00B862&color=fff" class="profile-img-lg">
+            <img id="profile-avatar-img" src="https://ui-avatars.com/api/?name=User&background=00B862&color=fff" class="profile-img-lg">
             <h3 id="profile-name-display">User</h3>
             <span id="profile-role-display" class="badge badge-active">USER</span>
             <div class="sidebar-menu">
@@ -32,19 +32,25 @@
             <div class="page-header">
                 <h2 class="page-title">Thông tin cá nhân</h2>
             </div>
-            <form onsubmit="event.preventDefault(); alert('Đã lưu thay đổi!');">
+            <form onsubmit="handleProfileUpdate(event)">
                 <div style="display: grid; gap: 20px;">
                     <div>
                         <label style="font-weight: 600; display: block; margin-bottom: 8px;">Họ và tên</label>
-                        <input type="text" id="input-name" class="btn-outline" style="width: 100%; padding: 12px; border-radius: 8px; cursor: text;">
+                        <input type="text" id="input-name" class="form-control" placeholder="Nguyễn Văn A">
                     </div>
                     <div>
                         <label style="font-weight: 600; display: block; margin-bottom: 8px;">Email</label>
-                        <input type="email" value="user@example.com" disabled style="width: 100%; padding: 12px; border-radius: 8px; background: #F3F4F6; border: 1px solid #E5E7EB;">
+                        <input type="email" id="profile-email" class="form-control" disabled style="opacity:0.6;">
                     </div>
                     <div>
                         <label style="font-weight: 600; display: block; margin-bottom: 8px;">Giới thiệu (Bio)</label>
-                        <textarea rows="4" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #E5E7EB;"></textarea>
+                        <textarea rows="4" id="profile-bio" class="form-control" placeholder="Tôi đầu tư vì..."></textarea>
+                    </div>
+                    <div>
+                        <label style="font-weight: 600; display: block; margin-bottom: 8px;">Ảnh đại diện</label>
+                        <label for="profile-avatar" class="input-file">Cập nhật avatar</label>
+                        <input type="file" id="profile-avatar" accept="image/*" style="display:none;">
+                        <small id="profile-avatar-name" style="display:block; margin-top:8px; color:var(--text-soft);">Sử dụng ảnh hiện tại</small>
                     </div>
                     <button class="btn btn-primary" style="width: fit-content;">Lưu thay đổi</button>
                 </div>

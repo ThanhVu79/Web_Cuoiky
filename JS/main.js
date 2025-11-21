@@ -16,6 +16,17 @@ const setStore = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 // Định dạng tiền tệ (VNĐ)
 const formatMoney = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 
+// Chuyển file sang base64 để lưu tạm trong localStorage
+const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        if (!file) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+};
+
 // Hiển thị thông báo nổi (Toast Notification)
 function showToast(message, type = 'success') {
     let container = document.getElementById('toast-container');
@@ -69,6 +80,44 @@ function handleLogin(e) {
     }
 }
 
+async function handleRegister(e) {
+    e.preventDefault();
+    const name = document.getElementById('register-name').value.trim();
+    const email = document.getElementById('register-email').value.trim().toLowerCase();
+    const pass = document.getElementById('register-password').value;
+    const confirm = document.getElementById('register-confirm').value;
+    const role = document.getElementById('register-role').value;
+
+    if (pass !== confirm) return showToast('Mật khẩu xác nhận chưa khớp', 'error');
+    if (pass.length < 6) return showToast('Mật khẩu tối thiểu 6 ký tự', 'error');
+
+    const users = getStore('users');
+    if (users.find(u => u.email === email)) return showToast('Email này đã tồn tại', 'error');
+
+    const avatarFile = document.getElementById('register-avatar').files[0];
+    const avatar = await fileToBase64(avatarFile);
+
+    const newUser = {
+        email,
+        pass,
+        name,
+        role,
+        wallet: 0,
+        bio: '',
+        avatar
+    };
+
+    users.push(newUser);
+    setStore('users', users);
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    showToast('Đăng ký thành công! Đang chuyển hướng...', 'success');
+
+    setTimeout(() => {
+        if (role === 'admin') window.location.href = 'admin-dashboard.html';
+        else window.location.href = 'dashboard.html';
+    }, 1200);
+}
+
 function handleLogout() {
     if(confirm('Bạn có chắc muốn đăng xuất?')) {
         localStorage.removeItem('currentUser');
@@ -105,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Setup các chức năng trang chủ
         setupFilters(projects);
         setupLeaderboard(projects);
+        setupHowTabs();
 
         // Ẩn nút "Bắt đầu dự án" nếu không phải Founder
         const createBtn = document.getElementById('hero-create-btn');
@@ -138,6 +188,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('input-name').value = currentUser.name;
         document.getElementById('profile-role-display').innerText = currentUser.role.toUpperCase();
         document.getElementById('profile-email').value = currentUser.email;
+        document.getElementById('profile-name-display').innerText = currentUser.name;
+        if (document.getElementById('profile-bio')) document.getElementById('profile-bio').value = currentUser.bio || '';
+        const avatarSrc = currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=00B862&color=fff`;
+        const avatarImg = document.getElementById('profile-avatar-img');
+        if (avatarImg) avatarImg.src = avatarSrc;
+        const avatarName = document.getElementById('profile-avatar-name');
+        if (avatarName) avatarName.innerText = 'Sử dụng ảnh hiện tại';
+        const avatarInput = document.getElementById('profile-avatar');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', () => {
+                avatarName.innerText = avatarInput.files[0]?.name || 'Sử dụng ảnh hiện tại';
+            });
+        }
     }
 });
 
@@ -148,11 +211,12 @@ function renderNavbar(user) {
     if (!container) return;
 
     if (user) {
+        const avatar = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=00B862&color=fff`;
         // Đã đăng nhập -> Hiển thị User Dropdown
         container.innerHTML = `
             <div class="user-dropdown">
                 <div class="user-btn" onclick="this.nextElementSibling.classList.toggle('show')">
-                    <img src="https://ui-avatars.com/api/?name=${user.name}&background=00B862&color=fff" class="user-avatar">
+                    <img src="${avatar}" class="user-avatar">
                     <span>${user.name}</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
@@ -189,7 +253,7 @@ function createProjectCard(p) {
             </div>
             <div class="card-body">
                 <h3 class="card-title" title="${p.title}">${p.title}</h3>
-                <p style="color:var(--text-light); font-size:0.9rem; margin-bottom:10px">bởi <b>${p.founder}</b></p>
+                <p style="color:var(--text-soft); font-size:0.9rem; margin-bottom:10px">bởi <b>${p.founder}</b></p>
                 
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" style="width:${Math.min(percent, 100)}%"></div>
@@ -302,6 +366,22 @@ function setupFilters(projects) {
     });
 }
 
+function setupHowTabs() {
+    const tabs = document.querySelectorAll('.how-tab');
+    const panels = document.querySelectorAll('.how-panel');
+    if (!tabs.length || !panels.length) return;
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            const target = document.getElementById(tab.dataset.target);
+            if (target) target.classList.add('active');
+        });
+    });
+}
+
 // --- 7. LOGIC DASHBOARD & CHI TIẾT ---
 
 function renderUserDashboard(user) {
@@ -313,11 +393,14 @@ function renderUserDashboard(user) {
     const roleBadge = document.getElementById('sidebar-role');
     roleBadge.innerText = user.role.toUpperCase();
     roleBadge.className = `badge badge-${user.role === 'founder' ? 'active' : 'pending'}`;
+    const avatarImg = document.getElementById('sidebar-avatar');
+    if (avatarImg) {
+        avatarImg.src = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=00B862&color=fff`;
+    }
 
     if (user.role === 'founder') {
         // === GIAO DIỆN FOUNDER ===
-        // Lọc dự án của chính user này (giả định check theo tên, thực tế check ID)
-        const myProjects = getStore('projects').filter(p => p.founder === user.name);
+        const myProjects = getStore('projects').filter(p => p.founderEmail === user.email);
         
         content.innerHTML = `
             <div class="page-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px">
@@ -330,10 +413,11 @@ function renderUserDashboard(user) {
                         <div class="card-body">
                             <div style="display:flex; justify-content:space-between; margin-bottom:10px">
                                 <span class="badge badge-${p.status === 'active' ? 'active' : p.status === 'pending' ? 'pending' : 'rejected'}">${p.status}</span>
-                                <span style="font-size:0.85rem; color:#666">ID: #${p.id}</span>
+                                <span style="font-size:0.85rem; color:var(--text-soft)">ID: #${p.id}</span>
                             </div>
                             <h4>${p.title}</h4>
                             <p style="margin:10px 0">Đã gọi: <b class="text-primary">${formatMoney(p.current)}</b> / ${formatMoney(p.target)}</p>
+                            <p style="font-size:0.85rem; color:var(--text-soft);">Deadline: ${p.deadline ? new Date(p.deadline).toLocaleDateString('vi-VN') : '—'}</p>
                             ${p.status === 'active' ? `<button class="btn btn-outline btn-full" onclick="showToast('Đã gửi yêu cầu rút vốn cho Admin!')">Yêu cầu rút vốn</button>` : ''}
                              ${p.status === 'rejected' ? `<p style="color:red; font-size:0.9rem">Dự án bị từ chối. Vui lòng liên hệ Admin.</p>` : ''}
                         </div>
@@ -347,18 +431,18 @@ function renderUserDashboard(user) {
         const totalInvested = history.reduce((acc, curr) => acc + curr.amount, 0);
         
         content.innerHTML = `
-            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom:30px; margin-top:0; box-shadow:none; border:none; padding:0">
-                <div class="stat-box" style="background:white; padding:20px; border-radius:12px; border:1px solid #eee">
+            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom:30px; margin-top:0;">
+                <div class="stat-box">
                     <span class="stat-label">Tổng số lần góp</span>
                     <span class="stat-number">${history.length}</span>
                 </div>
-                <div class="stat-box" style="background:white; padding:20px; border-radius:12px; border:1px solid #eee">
+                <div class="stat-box">
                     <span class="stat-label">Tổng tiền đã góp</span>
                     <span class="stat-number text-primary">${formatMoney(totalInvested)}</span>
                 </div>
             </div>
             <div class="table-container">
-                <h3 style="padding:20px; border-bottom:1px solid #eee">Lịch sử đầu tư</h3>
+                <h3 style="padding:20px; border-bottom:1px solid rgba(255,255,255,0.08)">Lịch sử đầu tư</h3>
                 <table class="admin-table">
                     <thead><tr><th>Dự án</th><th>Số tiền</th><th>Thời gian</th></tr></thead>
                     <tbody>
@@ -366,7 +450,7 @@ function renderUserDashboard(user) {
                             <tr>
                                 <td style="font-weight:600">${h.projectName}</td>
                                 <td class="text-primary">${formatMoney(h.amount)}</td>
-                                <td style="color:#666">${h.date}</td>
+                                <td style="color:var(--text-soft)">${h.date}</td>
                             </tr>
                         `).join('') : '<tr><td colspan="3" class="text-center">Bạn chưa đóng góp vào dự án nào.</td></tr>'}
                     </tbody>
@@ -424,9 +508,12 @@ function renderProjectDetail(id, user) {
     
     // Bind data to UI
     document.getElementById('d-title').innerText = p.title;
-    document.getElementById('d-founder').innerText = "Được tạo bởi " + p.founder;
+    document.getElementById('d-founder').innerText = "Founder: " + p.founder;
     document.getElementById('d-img').src = p.image;
     document.getElementById('d-desc').innerText = p.desc || "Chưa có mô tả chi tiết.";
+    if (document.getElementById('d-deadline')) {
+        document.getElementById('d-deadline').innerText = p.deadline ? `Deadline: ${new Date(p.deadline).toLocaleDateString('vi-VN')}` : '';
+    }
     document.getElementById('d-target').innerText = formatMoney(p.target);
     document.getElementById('d-current').innerText = formatMoney(p.current);
     document.getElementById('d-current').style.color = 'var(--primary)';
@@ -492,28 +579,41 @@ function handleDonate(e) {
 }
 
 // Xử lý Tạo dự án (Founder)
-function handleCreateProject(e) {
+async function handleCreateProject(e) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user || user.role !== 'founder') {
+        showToast('Chỉ Founder mới có thể tạo dự án', 'error');
+        return;
+    }
     
-    const title = document.getElementById('p-title').value;
-    const target = parseInt(document.getElementById('p-target').value);
+    const title = document.getElementById('p-title').value.trim();
+    const target = parseInt(document.getElementById('p-target').value, 10);
     const cat = document.getElementById('p-cat').value;
-    const desc = document.getElementById('p-desc').value;
+    const desc = document.getElementById('p-desc').value.trim();
+    const deadline = document.getElementById('p-deadline').value;
+    const mediaFile = document.getElementById('p-media').files[0];
+    const media = await fileToBase64(mediaFile);
+
+    if (!deadline) return showToast('Vui lòng chọn deadline', 'error');
 
     const projects = getStore('projects');
+    const activeCount = projects.filter(p => p.founderEmail === user.email && ['pending', 'active'].includes(p.status)).length;
+    if (activeCount >= 2) return showToast('Bạn đã đạt giới hạn 2 dự án đang hoạt động/chờ duyệt', 'error');
+
     const newProject = {
-        id: Date.now(), // Tạo ID ngẫu nhiên theo thời gian
-        title: title,
+        id: Date.now(),
+        title,
         founder: user.name,
-        founderId: "founder1",
+        founderEmail: user.email,
         category: cat,
-        target: target,
+        target,
         current: 0,
         supporters: 0,
-        image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800", // Ảnh placeholder
-        status: "pending", // Trạng thái chờ duyệt
-        desc: desc
+        image: media || "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800",
+        status: "pending",
+        deadline,
+        desc
     };
 
     projects.push(newProject);
@@ -521,6 +621,33 @@ function handleCreateProject(e) {
     
     showToast('Dự án đã gửi duyệt thành công! Vui lòng chờ Admin.');
     setTimeout(() => window.location.href = 'dashboard.html', 1500);
+}
+
+// Cập nhật hồ sơ người dùng
+async function handleProfileUpdate(e) {
+    e.preventDefault();
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) return window.location.href = 'login.html';
+
+    const name = document.getElementById('input-name').value.trim();
+    const bio = document.getElementById('profile-bio').value.trim();
+    let avatar = currentUser.avatar;
+    const avatarFile = document.getElementById('profile-avatar').files[0];
+    if (avatarFile) avatar = await fileToBase64(avatarFile);
+
+    const users = getStore('users');
+    const idx = users.findIndex(u => u.email === currentUser.email);
+    if (idx === -1) return;
+
+    users[idx] = { ...users[idx], name, bio, avatar };
+    setStore('users', users);
+    localStorage.setItem('currentUser', JSON.stringify(users[idx]));
+
+    document.getElementById('profile-avatar-img').src = avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=00B862&color=fff`;
+    document.getElementById('profile-name-display').innerText = name;
+    const avatarLabel = document.getElementById('profile-avatar-name');
+    if (avatarLabel) avatarLabel.innerText = avatarFile ? avatarFile.name : 'Sử dụng ảnh hiện tại';
+    showToast('Đã cập nhật hồ sơ thành công!');
 }
 
 // Xử lý Admin Duyệt/Từ chối
